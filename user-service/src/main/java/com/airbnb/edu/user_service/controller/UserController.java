@@ -17,45 +17,40 @@ import com.airbnb.edu.user_service.service.UserService;
 
 import jakarta.validation.Valid;
 
-
-
 @RestController
-@RequestMapping("/api/users")
-@CrossOrigin(origins="*")
-
+@RequestMapping("/api/usuarios")
+@CrossOrigin(origins = "*")
 public class UserController {
 
     private final UserService userService;
 
-    // Conectamos controlador con user service
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    // Cuando se envian datos en POST
-    @PostMapping
-    public User crear(@Valid @RequestBody User usuario) {
-        return userService.guardar(usuario);
-    }
-
-    // Cuando se piden los datos o obtener GET
     @GetMapping
     public List<User> listar() {
         return userService.listarTodos();
     }
 
-    @GetMapping ("/{id}")
-    public User obtenerUno(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public User obtenerUno(@PathVariable Integer id) {
         return userService.buscarPorId(id);
     }
-    @DeleteMapping ("/{id}")
-    public void eliminar(@PathVariable Long id){
-        userService.borrar(id);
+
+    @PostMapping
+    public User guardar(@Valid @RequestBody User usuario) {
+        return userService.crear(usuario);
     }
+
     @PutMapping("/{id}")
-    public User editar(@PathVariable Long id, @RequestBody User usuarioConCambios) {
-        return userService.actualizar(id, usuarioConCambios);
+    public User editar(@PathVariable Integer id, @Valid @RequestBody User usuario) {
+        return userService.actualizar(id, usuario);
     }
-    
-    
+
+    @DeleteMapping("/{id}")
+    public String eliminar(@PathVariable Integer id) {
+        userService.eliminar(id);
+        return "Usuario eliminado correctamente";
+    }
 }

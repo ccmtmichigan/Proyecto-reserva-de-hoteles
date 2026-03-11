@@ -9,39 +9,40 @@ import com.airbnb.edu.user_service.repository.UserRepository;
 
 @Service
 public class UserService {
+
     private final UserRepository userRepository;
 
-    // Conectamos el servicio con los datos alojados
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    // Se prepara la información para guardar
-    public User guardar(User usuario) {
-        return userRepository.save(usuario);
-    }
-
-    // Se en lista cada usuario
     public List<User> listarTodos() {
         return userRepository.findAll();
     }
 
-    public User buscarPorId(Long id) {
-    return userRepository.findById(id).orElse(null);
+    public User buscarPorId(Integer id) {
+        return userRepository.findById(id).orElse(null);
     }
 
-    public void borrar(Long id){
-    userRepository.deleteById(id);
+    public User crear(User usuario) {
+        return userRepository.save(usuario);
     }
-    
-    public User actualizar(Long id, User datosNuevos) {
-    User usuarioExistente = userRepository.findById(id).orElse(null);
-    if (usuarioExistente != null) {
-        usuarioExistente.setNombre(datosNuevos.getNombre());
-        usuarioExistente.setEmail(datosNuevos.getEmail());
-        
-        return userRepository.save(usuarioExistente);
+
+    public void eliminar(Integer id) {
+        userRepository.deleteById(id);
     }
-    return null;
-}
+
+    public User actualizar(Integer id, User datos) {
+        User userEx = userRepository.findById(id).orElse(null);
+        if (userEx != null) {
+            userEx.setNombre(datos.getNombre());
+            userEx.setApellido(datos.getApellido());
+            userEx.setCorreo(datos.getCorreo());
+            userEx.setContrasena(datos.getContrasena());
+            userEx.setRol(datos.getRol());
+            userEx.setEstado(datos.getEstado());
+            return userRepository.save(userEx);
+        }
+        return null;
+    }
 }
